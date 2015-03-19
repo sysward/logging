@@ -3,13 +3,16 @@ package logging
 import (
 	"fmt"
 	"log/syslog"
+	"os"
 	"runtime"
 	"strings"
 )
 
 func LogMsg(msg string) {
+	if os.Getenv("DOCKER") == "true" {
+		return
+	}
 	logfile, _ := syslog.New(syslog.LOG_NOTICE, "SYSWARD")
-	//logfile := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	pc, _, _, _ := runtime.Caller(1)
 	caller := runtime.FuncForPC(pc).Name()
 	_, file, line, _ := runtime.Caller(0)
